@@ -33,3 +33,9 @@
   , [Andrew Ng](https://www.andrewng.org/), [Feifei Li](https://profiles.stanford.edu/fei-fei-li)
   , [Sharon Zhou](https://sharonzhou.me/), [Sebastian Raschka](https://sebastianraschka.com/)
 - I wish to express my boundless gratitude to Professor Vikas Singh. I appreciate him enduring my incessant ignorance, offering me ample patience and tolerance. He is a vital guide on my academic journey.
+
+
+
+© 2023 - Peiran in USA - All rights reserved
+
+---
