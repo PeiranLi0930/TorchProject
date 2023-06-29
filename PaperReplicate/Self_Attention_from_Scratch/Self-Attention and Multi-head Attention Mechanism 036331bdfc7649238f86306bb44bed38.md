@@ -51,12 +51,13 @@ embedded_sentence = embeder(sentence_idx).detach() # [6, 16]
   as model parameters during training.
     - These matrics serve to project the inputs into query , key, and value components of the sequence.
 
-$$
-\text{Query Sequence: } \mathbf{q}^{(\mathrm{i})}=\mathbf{W}_{\mathrm{q}} \mathbf{x}^{(\mathrm{i})} \text { for } \mathrm{i} \in[1, \mathrm{~T}] \\
-\text{Key Sequence: } \mathbf{q}^{(\mathrm{i})}=\mathbf{W}_{\mathrm{k}} \mathbf{x}^{(\mathrm{i})} \text { for } \mathrm{i} \in[1, \mathrm{~T}] \\
-\text{Value Sequence: } \mathbf{v}^{(\mathrm{i})}=\mathbf{W}_{\mathrm{v}} \mathbf{x}^{(\mathrm{i})} \text { for } \mathrm{i} \in[1, \mathrm{~T}] \\
-\text{i refers to the token index position in the input sequence}
-$$
+$\text{Query Sequence: } \mathbf{q}^{(\mathrm{i})}=\mathbf{W}_{\mathrm{q}} \mathbf{x}^{(\mathrm{i})} \text { for } \mathrm{i} \in[1, \mathrm{~T}]$ 
+
+$\text{Key Sequence: } \mathbf{q}^{(\mathrm{i})}=\mathbf{W}_{\mathrm{k}} \mathbf{x}^{(\mathrm{i})} \text { for } \mathrm{i} \in[1, \mathrm{~T}]$
+
+$\text{Value Sequence: } \mathbf{v}^{(\mathrm{i})}=\mathbf{W}_{\mathrm{v}} \mathbf{x}^{(\mathrm{i})} \text { for } \mathrm{i} \in[1, \mathrm{~T}]$
+
+$\text{i refers to the token index position in the input sequence}$
 
 - Here, both $q^{(i)}, k^{(i)}$ are vectors of dim $d_k$; $v^{(i)}$ is the vector of dim $d_v$.
 $W_q,\ W_k$ have shape $d_k \times d$, $W_v$ has shape $d_v \times d$, $d$ is the size of each word vector $x^{(i)}$
