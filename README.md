@@ -8,6 +8,8 @@
 - Important architectures and mechanisms in Machine Learning and Deep Learning are included and 
   well annotated.
 
+
+
 ---
 ## Content
 
@@ -20,10 +22,10 @@
 ---
 ### Appreciations
 
-- The [Holy Land](https://biostat.wiscweb.wisc.edu/) giving me best working environments
+- The [Holy Land](https://www.wisc.edu/) giving me best working environments
 - My first Pytorch tutor: [Daniel Bourke](https://github.com/mrdbourke), the creater of [Zero to 
   Mastery Learn PyTorch for Deep Learning](https://www.learnpytorch.io/)
 - Significant Guiders on my path to Machine Learning and Deep Learning: [Robert Nowak](https://nowak.ece.wisc.edu/)
   , [Andrew Ng](https://www.andrewng.org/), [Feifei Li](https://profiles.stanford.edu/fei-fei-li)
-  , [Sharon Zhou](https://sharonzhou.me/)
+  , [Sharon Zhou](https://sharonzhou.me/), [Sebastian Raschka](https://sebastianraschka.com/)
 - I wish to express my boundless gratitude to Professor Vikas Singh. I appreciate him enduring my incessant ignorance, offering me ample patience and tolerance. He is a vital guide on my academic journey.
