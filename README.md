@@ -11,7 +11,7 @@
 
 
 
-- [x] Last Update Time: June/29/2023
+- [x] Last Update Time: June/30/2023
 - [ ] In Process: Vision Transformer Replication  
 
 ---
@@ -27,7 +27,7 @@
 ### Appreciations
 
 - The [Holy Land](https://www.wisc.edu/) giving me best working environments
-- My first Pytorch tutor: [Daniel Bourke](https://github.com/mrdbourke), the creater of [Zero to 
+- My first Pytorch tutor: [Daniel Bourke](https://github.com/mrdbourke), the creator of [Zero to 
   Mastery Learn PyTorch for Deep Learning](https://www.learnpytorch.io/)
 - Significant Guiders on my path to Machine Learning and Deep Learning: [Robert Nowak](https://nowak.ece.wisc.edu/)
   , [Andrew Ng](https://www.andrewng.org/), [Feifei Li](https://profiles.stanford.edu/fei-fei-li)
