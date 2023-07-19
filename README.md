@@ -11,15 +11,16 @@
 
 
 
-- [x] Last Update Time: June 11 2023
-- [ ] In Process: Vision Transformer Replication  
+- [x] Last Update Time: June 19 2023
+- [ ] In Process: Swin Transformer from Scratch  
 
 ---
 ## Content
 
 - [Self-Attention & Multi-Head Self-Attention Mechanism and Implementation from Scratch](https://github.com/PeiranLi0930/TorchProject/blob/main/PaperReplicate/Self_Attention_from_Scratch/Self-Attention%20and%20Multi-head%20Attention%20Mechanism%20036331bdfc7649238f86306bb44bed38.md)
 
-    - [Implementation & Code](https://github.com/PeiranLi0930/TorchProject/blob/main/PaperReplicate/Self_Attention_from_Scratch/self_attention_mechanism.ipynb)
+    - [Implementation Notebook](https://github.com/PeiranLi0930/TorchProject/blob/main/PaperReplicate/Self_Attention_from_Scratch/self_attention_mechanism.ipynb)
+    - [Functionalized Version](https://github.com/PeiranLi0930/TorchProject/blob/main/PaperReplicate/Self_Attention_from_Scratch/self_attention.py)
 
 
 
