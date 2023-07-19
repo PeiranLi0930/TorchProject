@@ -11,7 +11,7 @@
 
 
 
-- [x] Last Update Time: June/30/2023
+- [x] Last Update Time: June 11 2023
 - [ ] In Process: Vision Transformer Replication  
 
 ---

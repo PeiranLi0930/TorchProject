@@ -1,5 +1,6 @@
 # Self-Attention and Multi-head Attention Mechanism
 
+Tags: Recap
 
 # Why Self-Attention?
 
@@ -47,20 +48,18 @@ embedded_sentence = embeder(sentence_idx).detach() # [6, 16]
 
 ### Define Weight Matrices
 
-- Self-Attention uses three weight matrices, referred to as $W_q, W_k, W_v$, which are adjusted 
-  as model parameters during training.
+- Self-Attention uses three weight matrices, referred to as $W_q, W_k, W_v$, which are adjusted as model parameters during training.
     - These matrics serve to project the inputs into query , key, and value components of the sequence.
 
-$\text{Query Sequence: } \mathbf{q}^{(\mathrm{i})}=\mathbf{W}_{\mathrm{q}} \mathbf{x}^{(\mathrm{i})} \text { for } \mathrm{i} \in[1, \mathrm{~T}]$ 
-
-$\text{Key Sequence: } \mathbf{q}^{(\mathrm{i})}=\mathbf{W}_{\mathrm{k}} \mathbf{x}^{(\mathrm{i})} \text { for } \mathrm{i} \in[1, \mathrm{~T}]$
-
-$\text{Value Sequence: } \mathbf{v}^{(\mathrm{i})}=\mathbf{W}_{\mathrm{v}} \mathbf{x}^{(\mathrm{i})} \text { for } \mathrm{i} \in[1, \mathrm{~T}]$
-
-$\text{i refers to the token index position in the input sequence}$
+$$
+\text{Query Sequence: } \mathbf{q}^{(\mathrm{i})}=\mathbf{W}_{\mathrm{q}} \mathbf{x}^{(\mathrm{i})} \text { for } \mathrm{i} \in[1, \mathrm{~T}] \\
+\text{Key Sequence: } \mathbf{k}^{(\mathrm{i})}=\mathbf{W}_{\mathrm{k}} \mathbf{x}^{(\mathrm{i})} \text { for } \mathrm{i} \in[1, \mathrm{~T}] \\
+\text{Value Sequence: } \mathbf{v}^{(\mathrm{i})}=\mathbf{W}_{\mathrm{v}} \mathbf{x}^{(\mathrm{i})} \text { for } \mathrm{i} \in[1, \mathrm{~T}] \\
+\text{i refers to the token index position in the input sequence}
+$$
 
 - Here, both $q^{(i)}, k^{(i)}$ are vectors of dim $d_k$; $v^{(i)}$ is the vector of dim $d_v$.
-$W_q,\ W_k$ have shape $d_k \times d$, $W_v$ has shape $d_v \times d$, $d$ is the size of each word vector $x^{(i)}$
+$W_q,\ W_k$ have shape $d_k \times d$, $W_v$ has shape $d_v \times d$, $d$ is the embedding dim of each word vector $x^{(i)}$
 - Since we are computing the dot-product between the query and key vectors, these two vectors have to contain the same number of elements ($d_q=d_k$). However, the number of elements in the value vector $d_v$ which determines the size of the resulting context vector, is arbitrary.
 
 ```python
@@ -122,11 +121,39 @@ attention_weights_2 = F.softmax(omega_2 / d_k**0.5, dim=0)
 
 ![Untitled](Self-Attention%20and%20Multi-head%20Attention%20Mechanism%20036331bdfc7649238f86306bb44bed38/Untitled%202.png)
 
-- $z^{(2)}$  is an attention-weighted version of our original query input $x^{(2)}$
+- $z^{(2)}$ is an attention-weighted version of our original query input $x^{(2)}$
 - The context vector represents the second word in the context of the entire sentence and can be used as input to subsequent layers in a neural network or other models.
 
 ```python
 context_vector_2 = attention_weights_2 @ values # [28]
+```
+
+## Dimension Graph
+
+![Untitled](Self-Attention%20and%20Multi-head%20Attention%20Mechanism%20036331bdfc7649238f86306bb44bed38/Untitled%203.png)
+
+## Functionalized Version
+
+```python
+def calc_attn(embedded_sentence: torch.Tensor,
+              dim_q: int,
+              dim_k: int,
+              dim_v: int,
+              ):
+    assert dim_k == dim_q, "dim(K) == dim(Q) must be met!"
+
+    hid_dim = embedded_sentence.shape[-1]
+    W_Q = nn.Parameter(torch.randn(dim_q, hid_dim))
+    W_K = nn.Parameter(torch.randn(dim_k, hid_dim))
+    W_V = nn.Parameter(torch.randn(dim_v, hid_dim))
+
+    Q = (W_K @ embedded_sentence.T).T  # (T, d_q)
+    K = (W_Q @ embedded_sentence.T).T  # (T, d_k)
+    V = (W_V @ embedded_sentence.T).T  # (T, d_v)
+
+    attn = torch.softmax(1 / dim_k ** .5 * Q @ K.T, dim = 1) @ V # (T, d_v)
+
+    return attn
 ```
 
 # Multi-Head Attention
@@ -137,7 +164,7 @@ In the scaled dot-product attention, the input sequence was transformed using th
 
 - These three matrices can be considered as a single attention head in the context of multi-head attention.
 
-![Untitled](Self-Attention%20and%20Multi-head%20Attention%20Mechanism%20036331bdfc7649238f86306bb44bed38/Untitled%203.png)
+![Untitled](Self-Attention%20and%20Multi-head%20Attention%20Mechanism%20036331bdfc7649238f86306bb44bed38/Untitled%204.png)
 
 ## Multi-Head Attention
 
@@ -145,7 +172,34 @@ As its name implies, multi-head attention involves multiple such heads, each con
 
 - The final dimension of the context vector should be $(head, d_v)$
 
-![Untitled](Self-Attention%20and%20Multi-head%20Attention%20Mechanism%20036331bdfc7649238f86306bb44bed38/Untitled%204.png)
+![Untitled](Self-Attention%20and%20Multi-head%20Attention%20Mechanism%20036331bdfc7649238f86306bb44bed38/Untitled%205.png)
+
+### Functionalized Version
+
+```python
+def multi_head_attn(embedded_sentence: torch.Tensor,
+                    head: int,
+                    dim_q: int,
+                    dim_k: int,
+                    dim_v: int):
+    assert dim_k == dim_q, "dim(K) == dim(Q) must be met!"
+    hid_dim = embedded_sentence.shape[-1] # dim
+    stacked_embedded_sentence = embedded_sentence.repeat(head, 1, 1) # (head, T, dim)
+
+    W_Q = nn.Parameter(torch.randn(head, dim_q, hid_dim)) # (h, d_q, dim)
+    W_K = nn.Parameter(torch.randn(head, dim_k, hid_dim)) # (h, d_k, dim)
+    W_V = nn.Parameter(torch.randn(head, dim_v, hid_dim)) # (h, d_v, dim)
+
+    Q = (W_Q @ stacked_embedded_sentence.transpose(1, 2)).transpose(1, 2) # (h, T, d_q)
+    K = (W_K @ stacked_embedded_sentence.transpose(1, 2)).transpose(1, 2) # (h, T, d_k)
+    V = (W_V @ stacked_embedded_sentence.transpose(1, 2)).transpose(1, 2) # (h, T, d_v)
+
+    mha = torch.softmax(1 / d_k ** .5 * Q @ K.transpose(1, 2), dim = 2) @ V # (h, T, d_v)
+
+    return mha
+```
+
+### For Single Token
 
 ```python
 head = 3
@@ -179,4 +233,43 @@ multihead_attention_normalized_score_2 = F.softmax(multihead_attention_unnormali
 multihead_context_score_2 = torch.bmm(multihead_attention_normalized_score_2.unsqueeze(1),
                                       multihead_values.permute(0, 2, 1)).squeeze()  # (3, 28)
 
+```
+
+# Cross Attention
+
+- In self-attention, we work with the same input sequence. In cross-attention, we mix or combine two *different* input sequences.
+- Two input sequence $x_1$ and $x_2$ can have different numbers of elelments. However, their **embedding dimensions must match**
+
+![If we set $x_1$ = $x_2$, it is equal to self-attention](Self-Attention%20and%20Multi-head%20Attention%20Mechanism%20036331bdfc7649238f86306bb44bed38/Untitled%206.png)
+
+If we set $x_1$ = $x_2$, it is equal to self-attention
+
+- **Generated tokens** from Decoder (sen0) **query** the **tokens from Encoder** (sent1)
+    - Queries usually come from the decoder, and keys and values usually come from the encoder.
+
+## Functionalized Version
+
+```python
+def cross_attn(embedded_sentence_0: torch.Tensor,
+               embedded_sentence_1: torch.Tensor,
+               dim_q: int,
+               dim_k: int,
+               dim_v: int):
+    # Generated tokens from the decoder sentence 0 query the tokens from the encoder sentence 1
+    assert dim_k == dim_q, "dim(K) == dim(Q) must be met!"
+    assert embedded_sentence_0.shape[-1] == embedded_sentence_1.shape[-1], "Hid_dim must be same between two sentences"
+
+    hid_dim = embedded_sentence_0.shape[-1]
+
+    W_Q = nn.Parameter(torch.randn(dim_q, hid_dim))
+    W_K = nn.Parameter(torch.randn(dim_k, hid_dim))
+    W_V = nn.Parameter(torch.randn(dim_v, hid_dim))
+
+    Q = (W_K @ embedded_sentence_0.T).T # (T_0, d_q)
+    K = (W_Q @ embedded_sentence_1.T).T # (T_1, d_k)
+    V = (W_V @ embedded_sentence_1.T).T # (T_1, d_v)
+
+    attn = torch.softmax(1 / dim_k ** .5 * Q @ K.T, dim = 1) @ V # (T_0, d_v)
+
+    return attn
 ```
